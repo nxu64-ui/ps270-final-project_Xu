@@ -10,6 +10,18 @@ output:
 ## Project thoughts
 
 I plan to investigate whether higher levels of economic development are associated with greater life satisfaction across countries. My research question is: Does GDP per capita predict average life satisfaction? Drawing on modernization theory, I hypothesize that countries with higher GDP per capita will report higher levels of life satisfaction because greater material wealth improves living standards, economic security, and access to public goods, which in turn shape individual well-being in systematic ways. I will use data from the World Happiness Report. The dependent variable is the Life Ladder score, which measures average self-reported life satisfaction on a scale from 0 to 10 for each country-year. The key explanatory variable is GDP per capita (logged), measured in constant U.S. dollars. Both variables exhibit substantial variation across countries and over time, making regression analysis appropriate. If my hypothesis is correct, I expect to observe a positive and statistically significant relationship between GDP per capita and life satisfaction. A null or negative coefficient would disconfirm the hypothesis.
+
+
+
+
+
+
+
+
+
+
+
+
 ```{r}
 library(tidyverse)
 
