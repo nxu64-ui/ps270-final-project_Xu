@@ -85,4 +85,3 @@ ggplot(happiness_b_clean, aes(x = `Economy (GDP per Capita)`, y = `Happiness Sco
     y = "Happiness Score"
   )
 ```
-
