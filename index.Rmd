@@ -32,4 +32,56 @@ head(happiness)
 happiness2015 <- read_csv("data/2015.csv",show_col_types = FALSE)
 head(happiness2015)
 ```
+```{r}
+library(tidyverse)
+
+happiness_a <- read_csv("data/World_Happiness_Report.csv", show_col_types = FALSE)
+happiness_b <- read_csv("data/2015.csv", show_col_types = FALSE)
+
+head(happiness_a)
+head(happiness_b)
+```
+
+
+
+```{r}
+
+
+happiness_a_clean <- happiness_a %>%
+  select(Country, `Happiness Score`, Economy, Family, Health, Freedom, Generosity, Corruption) %>%
+  drop_na()
+happiness_b_clean <- happiness_b %>%
+  select(Country, Region, `Happiness Score`, 
+         `Economy (GDP per Capita)`, Family, 
+         `Health (Life Expectancy)`, Freedom, Generosity, 
+         `Trust (Government Corruption)`) %>%
+  drop_na()
+
+
+head(happiness_a_clean)
+head(happiness_b_clean)
+```
+
+```{r}
+ggplot(happiness_a_clean, aes(x = Economy, y = `Happiness Score`)) +
+  geom_point(alpha = 0.7, size = 2) +
+  geom_smooth(method = "lm", se = TRUE, linewidth = 1) +
+  labs(
+    title = "Economic Development and Happiness",
+    subtitle = "World_Happiness_Report.csv",
+    x = "Economy",
+    y = "Happiness Score"
+  )
+```
+```{r}
+ggplot(happiness_b_clean, aes(x = `Economy (GDP per Capita)`, y = `Happiness Score`)) +
+  geom_point(alpha = 0.7, size = 2) +
+  geom_smooth(method = "lm", se = TRUE, linewidth = 1) +
+  labs(
+    title = "GDP per Capita and Happiness",
+    subtitle = "2015.csv",
+    x = "Economy (GDP per Capita)",
+    y = "Happiness Score"
+  )
+```
 
