@@ -85,3 +85,20 @@ ggplot(happiness_b_clean, aes(x = `Economy (GDP per Capita)`, y = `Happiness Sco
     y = "Happiness Score"
   )
 ```
+```{r}
+model_b <- lm(`Happiness Score` ~ `Economy (GDP per Capita)`, data = happiness_b_clean)
+
+summary(model_b)
+```
+```{r}
+library(broom)
+
+model_b %>%
+  tidy() %>%
+  knitr::kable(
+    digits = 3,
+    caption = "Regression Results: GDP per Capita and Happiness Score"
+  )
+```
+To answer my research question, I ran a regression with Happiness Score as the dependent variable and GDP per capita as the independent variable. The results show a positive relationship between GDP per capita and happiness. The estimated coefficient of 2.218 indicates that increases in GDP per capita are associated with substantial increases in happiness scores, reinforcing the strength of this positive relationship. In other words, when GDP per capita increases by 1 unit, the happiness score increases by about 2.22 points. This means that countries with higher GDP per capita tend to have higher happiness scores. 
+
