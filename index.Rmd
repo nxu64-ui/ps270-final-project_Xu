@@ -7,21 +7,16 @@ output:
     self_contained: false
 ---
 
-## Project thoughts
+## Introduction
 
-I plan to investigate whether higher levels of economic development are associated with greater life satisfaction across countries. My research question is: Does GDP per capita predict average life satisfaction? Drawing on modernization theory, I hypothesize that countries with higher GDP per capita will report higher levels of life satisfaction because greater material wealth improves living standards, economic security, and access to public goods, which in turn shape individual well-being in systematic ways. I will use data from the World Happiness Report. The dependent variable is the Life Ladder score, which measures average self-reported life satisfaction on a scale from 0 to 10 for each country-year. The key explanatory variable is GDP per capita (logged), measured in constant U.S. dollars. Both variables exhibit substantial variation across countries and over time, making regression analysis appropriate. If my hypothesis is correct, I expect to observe a positive and statistically significant relationship between GDP per capita and life satisfaction. A null or negative coefficient would disconfirm the hypothesis.
-
-
+I plan to investigate whether higher levels of economic development are associated with greater life satisfaction across countries. My research question is: Does GDP per capita predict average life satisfaction? Drawing on modernization theory, I hypothesize that countries with higher GDP per capita will report higher levels of life satisfaction because greater material wealth improves living standards, economic security, and access to public goods, which in turn shape individual well-being in systematic ways.Understanding whether economic development improves life satisfaction is important because it helps policymakers evaluate whether economic growth alone is sufficient for improving societal well-being. I will use data from the World Happiness Report. The dependent variable is the Life Ladder score, which measures average self-reported life satisfaction on a scale from 0 to 10 for each country-year. The key explanatory variable is GDP per capita (logged), measured in constant U.S. dollars. Both variables exhibit substantial variation across countries and over time, making regression analysis appropriate. If my hypothesis is correct, I expect to observe a positive and statistically significant relationship between GDP per capita and life satisfaction. A null or negative coefficient would disconfirm the hypothesis.
 
 
 
 
+## Data
 
-
-
-
-
-
+This project uses a cross-sectional research design comparing countries in the 2015 World Happiness Report.
 
 ```{r}
 library(tidyverse)
@@ -33,6 +28,8 @@ head(happiness)
 happiness2015 <- read_csv("data/2015.csv",show_col_types = FALSE)
 head(happiness2015)
 ```
+
+
 ```{r}
 library(tidyverse)
 
@@ -63,6 +60,20 @@ head(happiness_a_clean)
 head(happiness_b_clean)
 ```
 
+### Data Histogram
+
+```{r}
+ggplot(happiness_b_clean, aes(x = `Happiness Score`)) +
+  geom_histogram(binwidth = 0.3) +
+  labs(
+    title = "Distribution of Happiness Scores Across Countries",
+    x = "Happiness Score",
+    y = "Number of Countries"
+  )
+```
+## Results
+### Plots
+
 ```{r}
 ggplot(happiness_a_clean, aes(x = Economy, y = `Happiness Score`)) +
   geom_point(alpha = 0.7, size = 2) +
@@ -74,6 +85,9 @@ ggplot(happiness_a_clean, aes(x = Economy, y = `Happiness Score`)) +
     y = "Happiness Score"
   )
 ```
+
+
+
 ```{r}
 ggplot(happiness_b_clean, aes(x = `Economy (GDP per Capita)`, y = `Happiness Score`)) +
   geom_point(alpha = 0.7, size = 2) +
@@ -85,20 +99,56 @@ ggplot(happiness_b_clean, aes(x = `Economy (GDP per Capita)`, y = `Happiness Sco
     y = "Happiness Score"
   )
 ```
+
+### Regression Models
+
 ```{r}
 model_b <- lm(`Happiness Score` ~ `Economy (GDP per Capita)`, data = happiness_b_clean)
 
 summary(model_b)
 ```
-```{r}
-library(broom)
 
+```{r}
 model_b %>%
-  tidy() %>%
+  broom::tidy() %>%
   knitr::kable(
     digits = 3,
     caption = "Regression Results: GDP per Capita and Happiness Score"
   )
 ```
-To answer my research question, I ran a regression with Happiness Score as the dependent variable and GDP per capita as the independent variable. The results show a positive relationship between GDP per capita and happiness. The estimated coefficient of 2.218 indicates that increases in GDP per capita are associated with substantial increases in happiness scores, reinforcing the strength of this positive relationship. In other words, when GDP per capita increases by 1 unit, the happiness score increases by about 2.22 points. This means that countries with higher GDP per capita tend to have higher happiness scores. 
+
+
+```{r}
+model_c <- lm(`Happiness Score` ~ `Economy (GDP per Capita)` + Family + `Health (Life Expectancy)`, data = happiness_b_clean)
+
+summary(model_c)
+```
+
+
+```{r}
+model_c %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 3,
+    caption = "Regression Results: GDP per Capita and Happiness Score"
+  )
+```
+
+### Interpretation Based on Regression Model B
+To answer my research question, I ran a regression with Happiness Score as the dependent variable and GDP per capita as the independent variable. The results show a positive relationship between GDP per capita and happiness. The estimated coefficient of 2.218 indicates that increases in GDP per capita are associated with substantial increases in happiness scores, reinforcing the strength of this positive relationship. In other words, when GDP per capita increases by 1 unit, the happiness score increases by about 2.22 points. This means that countries with higher GDP per capita tend to have higher happiness scores. This relationship is also highly statistically significant (p < 0.001), suggesting that the association is unlikely to be due to random chance. These findings support my hypothesis that greater economic development is associated with higher levels of life satisfaction across countries. However, because this analysis uses cross-sectional observational data, the relationship should not be interpreted as strictly causal. Other important factors, such as healthcare access, social support, political stability, and institutional quality, may also influence national happiness levels. 
+
+
+### Further Interpretation Based on Regression Model C
+
+
+To further examine whether GDP per capita remains associated with happiness after accounting for other factors, I estimated an additional regression model that includes the World Happiness Report’s Family and Health (Life Expectancy) variables. In this expanded model, GDP per capita remains positive and statistically significant. The coefficient for GDP per capita is 0.888, meaning that a one-unit increase in the World Happiness Report’s GDP per capita measure is associated with about a 0.89-point increase in Happiness Score, holding Family and Health (Life Expectancy) constant. This means that even among countries with similar levels of social support and health/life expectancy, countries with higher GDP per capita still tend to report higher happiness scores.
+
+However, the GDP coefficient is smaller in this model than in the original regression, where the coefficient was 2.218. This suggests that part of the original relationship between GDP per capita and happiness may overlap with differences in Family and Health (Life Expectancy). In other words, wealthier countries may be happier partly because they also tend to have stronger social support and better health-related outcomes. Family and Health are also both positive and statistically significant predictors of happiness in the expanded model. Overall, this analysis supports my hypothesis that GDP per capita is associated with higher happiness, while also showing that happiness is shaped by broader social and health-related factors, not economic development alone.
+
+
+## Conclusion
+
+Overall, the results support my hypothesis that higher GDP per capita is associated with higher national happiness scores. The main regression shows a positive and statistically significant relationship between the World Happiness Report’s GDP per capita measure and Happiness Score, and the expanded regression shows that this relationship remains positive even after accounting for Family and Health (Life Expectancy). However, because this project uses cross-sectional observational data, the results should not be interpreted as proof that GDP per capita alone directly causes higher happiness. Other factors, including social support, health/life expectancy, political stability, institutional quality, and inequality, may also shape national happiness levels. If I had more time and resources, I would improve this analysis by adding more control variables and using longitudinal data to examine whether changes in economic development within countries are associated with changes in happiness over time.
+
+
 
